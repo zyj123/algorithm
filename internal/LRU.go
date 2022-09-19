@@ -1,20 +1,20 @@
 package internal
 
-type cacheNode struct {
+type DLinkedNode struct {
 	key, value int
-	next, prev *cacheNode
+	next, prev *DLinkedNode
 }
 
 type LRUCache struct {
 	cap        int
-	head, tail *cacheNode
-	m          map[int]*cacheNode
+	head, tail *DLinkedNode
+	m          map[int]*DLinkedNode
 }
 
 func Constructor(capacity int) LRUCache {
 	var (
-		head = &cacheNode{}
-		tail = &cacheNode{}
+		head = &DLinkedNode{}
+		tail = &DLinkedNode{}
 	)
 	head.next = tail
 	tail.prev = head
@@ -22,7 +22,7 @@ func Constructor(capacity int) LRUCache {
 		cap:  capacity,
 		head: head,
 		tail: tail,
-		m:    map[int]*cacheNode{},
+		m:    map[int]*DLinkedNode{},
 	}
 }
 
@@ -43,18 +43,18 @@ func (c *LRUCache) Put(key int, value int) {
 	if len(c.m) >= c.cap {
 		c.removeLast()
 	}
-	c.putToHead(&cacheNode{
+	c.putToHead(&DLinkedNode{
 		key:   key,
 		value: value,
 	})
 }
 
-func (c *LRUCache) moveToHead(node *cacheNode) {
+func (c *LRUCache) moveToHead(node *DLinkedNode) {
 	c.remove(node)
 	c.putToHead(node)
 }
 
-func (c *LRUCache) remove(node *cacheNode) {
+func (c *LRUCache) remove(node *DLinkedNode) {
 	node.prev.next = node.next
 	node.next.prev = node.prev
 	delete(c.m, node.key)
@@ -64,7 +64,7 @@ func (c *LRUCache) removeLast() {
 	c.remove(c.tail.prev)
 }
 
-func (c *LRUCache) putToHead(node *cacheNode) {
+func (c *LRUCache) putToHead(node *DLinkedNode) {
 	head := c.head
 	node.next = head.next
 	head.next.prev = node
