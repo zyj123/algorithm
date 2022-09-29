@@ -40,7 +40,7 @@ func (s *stack) Pop() *TreeNode {
 	return ret
 }
 
-func inorderTraversal(root *TreeNode) []int {
+func inorderTraversal2(root *TreeNode) []int {
 	var ret []int
 	s := stack{}
 	for root != nil || !s.isEmpty() {
