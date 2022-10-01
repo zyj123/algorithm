@@ -1,4 +1,4 @@
-package internal
+package btree
 
 /**
  * Definition for a binary tree node.
@@ -27,6 +27,15 @@ func _maxDepth(root *TreeNode) int {
 }
 
 func maxDepth(node *TreeNode) int {
+	if node == nil {
+		return 0
+	}
+	left := maxDepth(node.Left)
+	right := maxDepth(node.Right)
+	return max(left, right) + 1
+}
+
+func maxDepth2(node *TreeNode) int {
 	if node == nil {
 		return 0
 	}

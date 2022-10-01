@@ -1,4 +1,4 @@
-package internal
+package btree
 
 func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 	if root == nil {
