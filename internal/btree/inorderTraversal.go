@@ -1,11 +1,5 @@
 package btree
 
-type TreeNode struct {
-	Val   int
-	Left  *TreeNode
-	Right *TreeNode
-}
-
 func _inorderTraversal(root *TreeNode) []int {
 	var ret []int
 	var dfs func(node *TreeNode)

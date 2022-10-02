@@ -19,9 +19,9 @@ func sumRootToLeaf(root *TreeNode) int {
 		if node.Left == nil && node.Right == nil {
 			return (sum << 1) | node.Val
 		}
-		
-	}
 
+	}
+	dfs(root)
 	return ret
 }
 
