@@ -1,10 +1,18 @@
 package btree
 
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
 func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 	if root == nil {
 		return nil
 	}
-	if root == p || root == q {
+	if root.Val == p.Val || root.Val == q.Val {
 		return root
 	}
 	left := lowestCommonAncestor(root.Left, p, q)
@@ -12,11 +20,11 @@ func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
 	if left != nil && right != nil {
 		return root
 	}
-	if left == nil {
-		return right
-	}
-	if right == nil {
+	if left != nil {
 		return left
+	}
+	if right != nil {
+		return right
 	}
 	return nil
 }
