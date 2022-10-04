@@ -1,17 +1,30 @@
 package btree
 
+/**
+ * Definition for a binary tree node.
+ * type TreeNode struct {
+ *     Val int
+ *     Left *TreeNode
+ *     Right *TreeNode
+ * }
+ */
 func isBalanced(root *TreeNode) bool {
 	ret := true
-	var dfs func(node *TreeNode) int
-	dfs = func(node *TreeNode) int {
+	var depth func(node *TreeNode) int
+	depth = func(node *TreeNode) int {
+		if !ret {
+			return 0
+		}
 		if node == nil {
 			return 0
 		}
-		left := 1 + dfs(node.Left)
-		right := 1 + dfs(node.Right)
-		ret = ret && (abs(left-right) <= 1)
-		return max(left, right)
+		lDep := depth(node.Left)
+		rDep := depth(node.Right)
+		if abs(lDep-rDep) > 1 {
+			ret = false
+		}
+		return 1 + max(lDep, rDep)
 	}
-	dfs(root)
+	depth(root)
 	return ret
 }
