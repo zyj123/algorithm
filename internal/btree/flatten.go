@@ -9,5 +9,4 @@ package btree
  * }
  */
 func flatten(root *TreeNode) {
-
 }
