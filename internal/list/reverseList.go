@@ -1,4 +1,4 @@
-package internal
+package list
 
 func reverseList(head *ListNode) *ListNode {
 	var (

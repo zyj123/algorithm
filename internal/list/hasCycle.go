@@ -1,4 +1,4 @@
-package internal
+package list
 
 func hasCycle(head *ListNode) bool {
 	slow, fast := head, head
