@@ -1,15 +1,20 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"golang.org/x/exp/constraints"
+)
 
 func main() {
-	ret := [][]int{}
-	nums := make([]int, 0, 4)
-	nums = append(nums, 1)
-	nums = append(nums, 2)
-	nums = append(nums, 3)
-	ret = append(ret, nums)
-	fmt.Println(ret)
-	nums = append(nums, 4)
-	fmt.Println(ret)
+	fmin := GMin[int]
+
+	x := fmin(2, 3)
+	fmt.Printf("%T", x)
+}
+
+func GMin[T constraints.Ordered](x, y T) T {
+	if x < y {
+		return x
+	}
+	return y
 }

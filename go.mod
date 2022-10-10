@@ -2,4 +2,4 @@ module wode
 
 go 1.18
 
-require github.com/golang/mock v1.6.0
+require golang.org/x/exp v0.0.0-20221006183845-316c7553db56
