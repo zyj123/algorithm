@@ -7,7 +7,7 @@ package list
  *     Next *ListNode
  * }
  */
-func plusOne(head *ListNode) *ListNode {
+func _plusOne(head *ListNode) *ListNode {
 	dummyHead := &ListNode{
 		Val:  0,
 		Next: head,
