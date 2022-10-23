@@ -1,10 +1,19 @@
 package internal
 
-//func addStrings(num1 string, num2 string) string {
-//	var ret string
-//	carry := 0
-//	for m, n := len(num1)-1, len(num2)-1; m >= 0 && n >= 0; m, m = m-1, n-1 {
-//		v1, v2 := num1[m]-'0', num2[n]-'0'
-//		ret = append(ret)
-//	}
-//}
+func addStrings(num1 string, num2 string) string {
+	//var (
+	//	l1 = len(num1) - 1
+	//	l2 = len(num2) - 1
+	//)
+	//arr := make([]byte, len(num1))
+	//carry := 0
+	//for ; l1 >= 0 || l2 >= 0; l1, l2 = l1-1, l2-1 {
+	//	sum += num1[l1] - '0'
+	//}
+	//if
+	//var sum byte
+	//	if l1 >= 0 {
+	//
+	//}
+	return ""
+}

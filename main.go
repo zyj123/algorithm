@@ -1,14 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/forgoer/openssl"
+)
 
 func main() {
-	for _, v := range nums() {
-		fmt.Println(v)
-	}
-}
-
-func nums() []int {
-	fmt.Println("hahah###")
-	return []int{1, 2, 3, 4, 5}
+	dst, err := openssl.AesECBEncrypt([]byte("qwdqedfq131"), []byte("ze-ho~&ng!w+a*ng"), openssl.PKCS7_PADDING)
+	fmt.Println(dst, err)
 }
