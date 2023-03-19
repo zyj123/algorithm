@@ -2,69 +2,29 @@ package main
 
 import (
 	"fmt"
-	"sort"
 )
 
 func main() {
-	nums := []int{13}
-	res := 0
-	for _, v := range nums {
-		res ^= v
-	}
-
-	fmt.Println(res ^ 13)
+	fmt.Println(mySqrt(4))
+	fmt.Println(mySqrt(9))
+	fmt.Println(mySqrt(1))
+	fmt.Println(mySqrt(0))
+	fmt.Println(mySqrt(10))
+	fmt.Println(mySqrt(16))
+	fmt.Println(mySqrt(15))
+	fmt.Println(mySqrt(17))
 }
-
-func vowelStrings(words []string, left int, right int) int {
-	mp := map[uint8]bool{
-		'a': true,
-		'e': true,
-		'i': true,
-		'o': true,
-		'u': true,
-	}
+func mySqrt(x int) int {
+	l, r := 0, x
 	ans := 0
-	for i := left; i <= right; i++ {
-		word := words[i]
-		if mp[word[0]] && mp[word[len(word)-1]] {
-			ans += 1
+	for l <= r {
+		m := l + (r-l)/2
+		if m*m <= x {
+			ans = m
+			l = m + 1
+		} else if m*m > x {
+			r = m - 1
 		}
 	}
 	return ans
-}
-
-func maxScore(nums []int) int {
-	sort.Slice(nums, func(i, j int) bool {
-		return nums[i] > nums[j]
-	})
-	res := 0
-	pre := 0
-	for _, v := range nums {
-		pre += v
-		if pre > 0 {
-			res++
-		}
-	}
-	return res
-}
-
-func beautifulSubarrays(nums []int) int64 {
-	if len(nums) == 1 && nums[0] == 0 {
-		return 1
-	}
-	xors := map[int]int{-1: 0}
-	preXOR := 0
-	for k, v := range nums {
-		preXOR ^= v
-		xors[k] = preXOR
-	}
-	var res int64
-	for i := 0; i < len(nums)-1; i++ {
-		for j := i + 1; j < len(nums); j++ {
-			if xors[j]^xors[i-1] == 0 {
-				res++
-			}
-		}
-	}
-	return res
 }
