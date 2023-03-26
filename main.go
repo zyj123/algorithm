@@ -1,30 +1,34 @@
 package main
 
 import (
-	"fmt"
+	"sort"
 )
 
 func main() {
-	fmt.Println(mySqrt(4))
-	fmt.Println(mySqrt(9))
-	fmt.Println(mySqrt(1))
-	fmt.Println(mySqrt(0))
-	fmt.Println(mySqrt(10))
-	fmt.Println(mySqrt(16))
-	fmt.Println(mySqrt(15))
-	fmt.Println(mySqrt(17))
+
 }
-func mySqrt(x int) int {
-	l, r := 0, x
-	ans := 0
-	for l <= r {
-		m := l + (r-l)/2
-		if m*m <= x {
-			ans = m
-			l = m + 1
-		} else if m*m > x {
-			r = m - 1
+
+func minFallingPathSum(matrix [][]int) int {
+	preMins := matrix[0]
+	n := len(matrix)
+	for row := 1; row < n; row++ {
+		curMins := make([]int, n)
+		for col := 0; col < n; col++ {
+			curMins[col] = matrix[row][col] + min(preMins, []int{col - 1, col, col + 1})
+		}
+		preMins = curMins
+	}
+	sort.Ints(preMins)
+	return preMins[0]
+}
+
+func min(nums []int, indexs []int) int {
+	tmp := make([]int, 0)
+	for _, index := range indexs {
+		if index >= 0 && index < len(nums) {
+			tmp = append(tmp, nums[index])
 		}
 	}
-	return ans
+	sort.Ints(tmp)
+	return tmp[0]
 }
