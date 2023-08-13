@@ -1,141 +1,118 @@
 package main
 
-import (
-	"bufio"
-	"fmt"
-	"os"
-)
+import p "wode/alternatePrint"
 
 func main() {
-	//chars1 := [][]byte{
-	//	{'1', ' ', '3'},
-	//	{'-', '+', '-'},
-	//	{'2', ' ', '4'},
-	//}
-	//chars2 := [][]byte{
-	//	{' ', ' ', '2', ' ', ' '},
-	//	{'1', '+', '-', '/', '2'},
-	//	{' ', ' ', '3', ' ', ' '},
-	//}
+	p.Print()
 
-	// read from file
-	// 假设字符串是有效的表达式
-	chars1 := readFile("./example1.txt")
-	chars2 := readFile("./example2.txt")
-	fmt.Println(chars1, chars2)
-
-	fmt.Println(calculator(chars1) == "5/4")
-	fmt.Println(calculator(chars2) == "4/3")
 }
 
-func readFile(file string) [][]byte {
-	f, err := os.Open(file)
-	if err != nil {
-		panic(err)
-	}
-	defer f.Close()
+//上机编程题
+//题目描述：扁平数组转Tree
+//
+//给定一个扁平数组，数组内每个对象的id属性是唯一的。每个对象具有pid属性，
+//pid属性为0表示为根节点（根节点只有一个），其它表示自己的父节点id。
+//编写一段程序，输入为给定的扁平数组，输出要求为一个树结构，
+//为其中每个对象增加children数组属性（里面存放child对象）。
+//
+//
+//给定输入：
+//[
+//{"id": 1, "name": "部门1", "pid": 0},
+//{"id": 2, "name": "部门2", "pid": 1},
+//{"id": 3, "name": "部门3", "pid": 1},
+//{"id": 4, "name": "部门4", "pid": 3},
+//{"id": 5, "name": "部门5", "pid": 4}
+//]
+//
+//给定输出：
+//{
+//"id": 1,
+//"name": "部门1",
+//"pid": 0,
+//"children": [
+//{
+//"id": 2,
+//"name": "部门2",
+//"pid": 1,
+//"children": []
+//},
+//{
+//"id": 3,
+//"name": "部门3",
+//"pid": 1,
+//"children": [
+//{
+//"id": 4,
+//"name": "部门4",
+//"pid": 3,
+//"children": [
+//{
+//"id": 5,
+//"name": "部门5",
+//"pid": 4,
+//"children": []
+//}
+//]
+//}
+//]
+//}
+//]
+//}
 
-	scanner := bufio.NewScanner(f)
-	res := make([][]byte, 0)
-	for scanner.Scan() {
-		res = append(res, scanner.Bytes())
-	}
-	if err = scanner.Err(); err != nil {
-		panic(err)
-	}
-	if len(res) != 3 || len(res[0]) != len(res[2]) {
-		panic(fmt.Errorf("file is illegal"))
-	}
-
-	return res
+type Num struct {
+	ID   int
+	Name string
+	PID  int
 }
 
-func calculator(chars [][]byte) string {
-	stack := make([][]int, 0)
-	var preSign byte = '+'
-	var (
-		line1 = chars[0]
-		line2 = chars[1]
-		line3 = chars[2]
-	)
-	for i := 0; i < len(line2); i++ {
-		// 符号位
-		if (i >= len(line1) && !isDigit(line2[i])) || (i < len(line1) && line1[i] == ' ' && !isDigit(line2[i])) {
-			preSign = line2[i]
-			continue
+type Tree struct {
+	ID       int
+	Name     string
+	Children []*Tree
+}
+
+func toTree(nums []Num) *Tree {
+	if len(nums) == 0 {
+		return nil
+	}
+	mp := make(map[int][]Num, 0)
+	for _, num := range nums {
+		mp[num.PID] = append(mp[num.PID], num)
+	}
+
+	var head *Tree
+	if numArr, ok := mp[0]; ok {
+		num := numArr[0]
+		head = &Tree{
+			ID:   num.ID,
+			Name: num.Name,
 		}
-		// 值位
-		val := make([]int, 0)
-		if isDigit(line2[i]) {
-			val = []int{toInt(line2[i]), 1}
-		} else {
-			val = []int{toInt(line1[i]), toInt(line3[i])}
+	} else {
+		return nil
+	}
+
+	q := make([]*Tree, 0)
+	q = append(q, head)
+	for len(q) > 0 {
+		n := len(q)
+		for i := 0; i < n; i++ {
+			node := q[i]
+			if numArr, ok := mp[node.ID]; ok {
+				children := make([]*Tree, 0)
+				for _, num := range numArr {
+					child := &Tree{
+						ID:   num.ID,
+						Name: num.Name,
+					}
+					children = append(children, child)
+					q = append(q, child)
+				}
+				node.Children = children
+			}
 		}
-
-		switch preSign {
-		case '+':
-			stack = append(stack, val)
-		case '-':
-			zeroVal := []int{0, 1}
-			stack = append(stack, sub(zeroVal, val))
-		case '*':
-			stack[len(stack)-1] = multi(stack[len(stack)-1], val)
-		case '/':
-			stack[len(stack)-1] = divide(stack[len(stack)-1], val)
-		}
+		q = q[n:]
 	}
-	res := []int{0, 1}
-	for _, v := range stack {
-		res = add(res, v)
-	}
-	res = simplify(res)
-	return fmt.Sprintf("%d/%d", res[0], res[1])
-}
 
-func toInt(i byte) int {
-	return int(i - '0')
-}
-
-func isDigit(c byte) bool {
-	return c >= '0' && c <= '9'
-}
-
-// 分数计算 []int{分子，分母}
-func add(a, b []int) []int {
-	denominator := a[1] * b[1]
-	numeratorA := a[0] * b[1]
-	numeratorB := b[0] * a[1]
-	return simplify([]int{numeratorA + numeratorB, denominator})
-}
-func sub(a, b []int) []int {
-	denominator := a[1] * b[1]
-	numeratorA := a[0] * b[1]
-	numeratorB := b[0] * a[1]
-	return simplify([]int{numeratorA - numeratorB, denominator})
-}
-func multi(a, b []int) []int {
-	numerator := a[0] * b[0]
-	denominator := a[1] * b[1]
-	return simplify([]int{numerator, denominator})
-}
-func divide(a, b []int) []int {
-	numerator := a[0] * b[1]
-	denominator := a[1] * b[0]
-	return simplify([]int{numerator, denominator})
-}
-
-// 化简分数
-func simplify(a []int) []int {
-	g := gcd(a[0], a[1])
-	return []int{a[0] / g, a[1] / g}
-}
-
-func gcd(a, b int) int {
-	if a < b {
-		a, b = b, a
-	}
-	for a%b != 0 {
-		a, b = b, a%b
-	}
-	return b
+	return head
 }
