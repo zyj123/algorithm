@@ -17,7 +17,7 @@ func isCoprime(x, y int) bool {
 }
 
 func firstDigit(x int) int {
-	for x > 10 {
+	for x >= 10 {
 		x /= 10
 	}
 	return x
