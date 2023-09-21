@@ -1,14 +1,10 @@
-package main
+package http_server
 
 import (
 	"fmt"
 	"net/http"
 	"time"
 )
-
-func main() {
-	server()
-}
 
 func server() {
 	http.HandleFunc("/", hello)
@@ -22,11 +18,10 @@ func server() {
 
 func hello(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("%+v\n", w.Header())
-	go func() {
-		time.Sleep(1 * time.Second)
-		n, err := fmt.Fprintf(w, "hello")
-		fmt.Println(n, "  ", err)
-	}()
+
+	time.Sleep(1 * time.Second)
+	n, err := fmt.Fprintf(w, "hello")
+	fmt.Println(n, "  ", err)
 	fmt.Println("handle finish...")
 	return
 }
