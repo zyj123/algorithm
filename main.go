@@ -5,14 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"time"
 )
 
 func main() {
-	ct := time.Now()
-
-	fmt.Println(ct.AddDate(0, 24, 0))
-
 }
 
 func main2() {
