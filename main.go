@@ -8,6 +8,12 @@ import (
 )
 
 func main() {
+
+}
+
+func modify(nums []int) {
+	nums = append(nums, 1)
+	nums[0] = 999
 }
 
 func main2() {
